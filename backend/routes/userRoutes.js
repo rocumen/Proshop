@@ -15,15 +15,15 @@ import { protect, admin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.route("/register").post(registerUser).get(protect, admin, getUsers);
+router.route("/").post(registerUser).get(protect, admin, getUsers);
 router.post("/logout", logoutUser);
 router.post("/auth", authUser);
-//protected
+
 router
   .route("/profile")
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile);
-//protected
+
 router
   .route("/:id")
   .delete(protect, admin, deleteUser)
