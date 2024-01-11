@@ -70,14 +70,26 @@ const ProductEditScreen = () => {
     }
   };
 
+  // const uploadFileHandler = async (e) => {
+  //   const formData = new FormData();
+  //   formData.append("image", e.target.files[0]);
+
+  //   try {
+  //     const res = await uploadProductImage(formData).unwrap();
+  //     toast.success(res.message);
+  //     setImage(res.image);
+  //   } catch (error) {
+  //     toast.error(error?.data?.message || error.error);
+  //   }
+  // };
   const uploadFileHandler = async (e) => {
     const formData = new FormData();
     formData.append("image", e.target.files[0]);
 
     try {
-      const res = await uploadProductImage(formData).unwrap();
-      toast.success(res.message);
-      setImage(res.image);
+      const { message, imageUrl } = await uploadProductImage(formData).unwrap();
+      toast.success(message);
+      setImage(imageUrl);
     } catch (error) {
       toast.error(error?.data?.message || error.error);
     }
