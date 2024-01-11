@@ -49,28 +49,6 @@ const ProductEditScreen = () => {
     }
   }, [product]);
 
-  // const submitHandler = async (e) => {
-  //   e.preventDefault();
-
-  //   const updatedProduct = {
-  //     productId,
-  //     name,
-  //     price,
-  //     image,
-  //     brand,
-  //     category,
-  //     countInStock,
-  //     description,
-  //   };
-  //   const result = await updateProduct(updatedProduct);
-  //   if (result.error) {
-  //     toast.error(result.error);
-  //   } else {
-  //     toast.success("Product updated");
-  //     navigate("/admin/productlist");
-  //   }
-  // };
-
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -154,6 +132,7 @@ const ProductEditScreen = () => {
                 onChange={uploadFileHandler}
               ></Form.Control>
             </Form.Group>
+
             {loadingUpload && <Loader />}
 
             <Form.Group controlId="brand" className="my-2">

@@ -9,6 +9,7 @@ import {
   useUpdateUserMutation,
   useGetUserDetailsQuery,
 } from "../../slices/usersApiSlice";
+
 const UserEditScreen = () => {
   const { id: userId } = useParams();
 

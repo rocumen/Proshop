@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Navbar,
   Nav,
@@ -19,7 +18,6 @@ import { resetCart } from "../slices/cartSlice";
 import { useNavigate } from "react-router-dom";
 
 import SearchBox from "./SearchBox";
-import { reset } from "nodemon";
 
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
