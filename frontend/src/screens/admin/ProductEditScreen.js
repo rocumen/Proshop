@@ -92,39 +92,16 @@ const ProductEditScreen = () => {
     }
   };
 
-  // const uploadFileHandler = async (e) => {
-  //   const formData = new FormData();
-  //   formData.append("image", e.target.files[0]);
-
-  //   try {
-  //     const res = await uploadProductImage(formData).unwrap();
-  //     toast.success(res.message);
-  //     setImage(res.image);
-  //   } catch (error) {
-  //     toast.error(error?.data?.message || error.error);
-  //   }
-  // };
-
   const uploadFileHandler = async (e) => {
-    const file = e.target.files[0];
     const formData = new FormData();
-    formData.append("image", file);
-    setUploading(true);
+    formData.append("image", e.target.files[0]);
 
     try {
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
-
-      const { data } = await axios.post("/api/upload", formData, config);
-
-      setImage(data);
-      setUploading(false);
+      const res = await uploadProductImage(formData).unwrap();
+      toast.success(res.message);
+      setImage(res.image);
     } catch (error) {
-      console.error(error);
-      setUploading(false);
+      toast.error(error?.data?.message || error.error);
     }
   };
 
