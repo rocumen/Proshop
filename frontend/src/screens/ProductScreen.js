@@ -83,8 +83,40 @@ function ProductScreen() {
           <Meta title={product.name} />
           <Row>
             <Col md={5}>
-              <Image src={product.image} alt={product.name} fluid />
+              {/* Display the main image */}
+              <Image
+                rounded
+                src={
+                  product.image && product.image.length > 0
+                    ? product.image[0]
+                    : ""
+                }
+                alt={product.name}
+                fluid
+                style={{ width: 451, height: 359 }}
+              />
+
+              <Col md={12}>
+                <Row>
+                  {product.image.slice(0, 3).map((image, index) => (
+                    <Col key={index} md={4}>
+                      <Image
+                        rounded
+                        src={image}
+                        alt={`${product.name} - Image ${index + 2}`}
+                        fluid
+                        style={{
+                          width: 150,
+                          height: 120,
+                          marginTop: "24px",
+                        }}
+                      />
+                    </Col>
+                  ))}
+                </Row>
+              </Col>
             </Col>
+
             <Col md={4}>
               <ListGroup variant="flush">
                 <ListGroup.Item>
@@ -95,6 +127,13 @@ function ProductScreen() {
                     value={product.rating}
                     text={`${product.numReviews} reviews`}
                   />
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <select>
+                    {product.variant.map((x) => (
+                      <option value={x}>{x}</option>
+                    ))}
+                  </select>
                 </ListGroup.Item>
 
                 <ListGroup.Item>
@@ -153,16 +192,19 @@ function ProductScreen() {
                     <Button
                       className="btn-block"
                       type="button"
-                      disabled={product.countInStock === 0}
+                      disabled={userInfo.isAdmin || product.countInStock === 0}
                       onClick={addToCartHandler}
                     >
-                      Add To Cart
+                      {userInfo.isAdmin
+                        ? "Admin Cannot Add to Cart"
+                        : "Add To Cart"}
                     </Button>
                   </ListGroup.Item>
                 </ListGroup>
               </Card>
             </Col>
           </Row>
+
           <Row className="review">
             <Col md={6} className="my-3">
               <h2>Reviews</h2>
@@ -176,6 +218,7 @@ function ProductScreen() {
                     <p>{review.comment}</p>
                   </ListGroup.Item>
                 ))}
+
                 <ListGroup.Item>
                   <h2>Write a Customer Review</h2>
 

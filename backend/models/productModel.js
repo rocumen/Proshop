@@ -37,10 +37,7 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
 
-    image: {
-      type: String,
-      required: true,
-    },
+    image: [String],
 
     brand: {
       type: String,
@@ -51,6 +48,7 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    variant: [String],
 
     description: {
       type: String,

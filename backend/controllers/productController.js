@@ -43,9 +43,10 @@ const createProduct = asyncHandler(async (req, res) => {
     name: "Sample name",
     price: 0,
     user: req.user._id,
-    image: "/images/sample.jpg",
+    image: undefined,
     brand: "Sample Brand",
     category: "Sample Category",
+    variant: "",
     countInStock: 0,
     numReviews: 0,
     description: "Sample Description",
@@ -59,18 +60,43 @@ const createProduct = asyncHandler(async (req, res) => {
 // @route PUT /api/products/:id
 // @access Private/Admin
 const updateProduct = asyncHandler(async (req, res) => {
-  const { name, price, description, image, brand, category, countInStock } =
-    req.body;
+  const {
+    name,
+    price,
+    description,
+    image,
+    brand,
+    category,
+    variant,
+    countInStock,
+  } = req.body;
   const product = await Product.findById(req.params.id);
 
   if (product) {
+    // Update other fields
     product.name = name;
     product.price = price;
     product.description = description;
-    product.image = image;
     product.brand = brand;
     product.category = category;
     product.countInStock = countInStock;
+
+    // Update the image array
+    if (image && Array.isArray(image)) {
+      // Concatenate new images to the existing array
+      product.image = product.image.concat(image);
+    } else {
+      // Handle other cases if needed
+      product.image = image;
+    }
+
+    // adds variant in the array
+    if (variant && Array.isArray(variant)) {
+      // Filter out duplicates before concatenating
+      product.variant = [...new Set([...product.variant, ...variant])];
+    } else {
+      product.variant = variant;
+    }
 
     const updatedProduct = await product.save();
     res.json(updatedProduct);
@@ -146,6 +172,36 @@ const getTopProducts = asyncHandler(async (req, res) => {
   res.status(200).json(products);
 });
 
+const deleteProductImage = asyncHandler(async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const imageUrlToDelete = req.body.imageUrl;
+
+    // Check if the imageUrlToDelete exists in the product's images
+    const imageIndex = product.image.indexOf(imageUrlToDelete);
+
+    if (imageIndex === -1) {
+      return res.status(404).json({ message: "Image not found in product" });
+    }
+
+    // Remove the imageUrlToDelete from the product's images array
+    product.image.splice(imageIndex, 1);
+
+    // Save the updated product
+    await product.save();
+
+    res.status(200).json({ message: "Image deleted successfully", product });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 export {
   getProducts,
   getProductById,
@@ -154,4 +210,5 @@ export {
   deleteProduct,
   createProductReview,
   getTopProducts,
+  deleteProductImage,
 };
