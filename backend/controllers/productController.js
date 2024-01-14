@@ -71,6 +71,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     countInStock,
   } = req.body;
   const product = await Product.findById(req.params.id);
+  console.log(image);
 
   if (product) {
     // Update other fields
@@ -174,28 +175,23 @@ const getTopProducts = asyncHandler(async (req, res) => {
 
 const deleteProductImage = asyncHandler(async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.query.productId);
 
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
+    const { imageIndex } = req.body;
 
-    const imageUrlToDelete = req.body.imageUrl;
+    const imageIndexToDelete = imageIndex.split("/").map(Number);
 
-    // Check if the imageUrlToDelete exists in the product's images
-    const imageIndex = product.image.indexOf(imageUrlToDelete);
+    imageIndexToDelete.forEach((index) => {
+      const image = product.image.indexOf(index);
 
-    if (imageIndex === -1) {
-      return res.status(404).json({ message: "Image not found in product" });
-    }
-
-    // Remove the imageUrlToDelete from the product's images array
-    product.image.splice(imageIndex, 1);
+      // // Remove the imageUrlToDelete from the product's images array
+      product.image.splice(image, 1);
+    });
 
     // Save the updated product
     await product.save();
 
-    res.status(200).json({ message: "Image deleted successfully", product });
+    res.status(200).json({ message: "Image deleted successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });

@@ -88,7 +88,7 @@ function ProductScreen() {
                 rounded
                 src={
                   product.image && product.image.length > 0
-                    ? product.image[0]
+                    ? product.image[0].url
                     : ""
                 }
                 alt={product.name}
@@ -102,7 +102,7 @@ function ProductScreen() {
                     <Col key={index} md={4}>
                       <Image
                         rounded
-                        src={image}
+                        src={image.url}
                         alt={`${product.name} - Image ${index + 2}`}
                         fluid
                         style={{

@@ -14,7 +14,7 @@ const ProductCarousel = () => {
         <Carousel.Item key={product._id}>
           <Link to={`/product/${product._id}`}>
             <Image
-              src={product.image[0]}
+              src={product.image[0].url}
               alt={product.name}
               fluid
               style={{ width: "640px", height: "510px" }}

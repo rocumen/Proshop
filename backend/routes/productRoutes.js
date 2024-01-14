@@ -17,6 +17,9 @@ import checkObjectId from "../middleware/checkObjectId.js";
 
 router.route("/").get(getProducts).post(protect, admin, createProduct);
 router.get("/top", getTopProducts);
+
+router.route("/update").put(deleteProductImage);
+
 router
   .route("/:id")
   .get(checkObjectId, getProductById)
@@ -24,7 +27,5 @@ router
   .delete(protect, admin, checkObjectId, deleteProduct);
 
 router.route("/:id/reviews").post(protect, checkObjectId, createProductReview);
-
-router.route("/:image").put(protect, admin, deleteProductImage);
 
 export default router;

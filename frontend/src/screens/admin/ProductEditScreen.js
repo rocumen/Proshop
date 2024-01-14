@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Form, Button, Image, Row, Col, Modal } from "react-bootstrap";
+import { Form, Button, Image, Modal } from "react-bootstrap";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import FormContainer from "../../components/FormContainer";
@@ -18,7 +18,7 @@ const ProductEditScreen = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [image, setImage] = useState("");
-  const [selectedImage, setSelectedImage] = useState([null]);
+  const [selectedImage, setSelectedImage] = useState([]);
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
   const [variant, setVariant] = useState("");
@@ -39,7 +39,10 @@ const ProductEditScreen = () => {
   const [uploadProductImages, { isLoading: loadingUpload }] =
     useUploadProductImagesMutation();
 
-  const [deleteProductImage] = useDeleteProductImageMutation();
+  const [
+    deleteProductImage,
+    { isLoading: deleteLoading, refetch: refetchImage },
+  ] = useDeleteProductImageMutation();
 
   const navigate = useNavigate();
 
@@ -113,9 +116,16 @@ const ProductEditScreen = () => {
     }
   };
 
-  const deleteImageHandler = async (id) => {
+  const deleteImageHandler = async (imageIndex, productId) => {
     try {
-      console.log(product.image);
+      const props = {
+        imageIndex: imageIndex.join("/"),
+        productId: productId,
+      };
+      deleteProductImage(props);
+
+      toast.success("Deleted image");
+      refetch();
     } catch (error) {
       toast.error(error?.data?.message || error.error);
     }
@@ -233,7 +243,7 @@ const ProductEditScreen = () => {
                     >
                       <Image
                         rounded
-                        src={image}
+                        src={image.url}
                         alt={product.name}
                         fluid
                         style={{
@@ -255,7 +265,7 @@ const ProductEditScreen = () => {
                   </Button>
                   <Button
                     variant="danger"
-                    onClick={() => deleteImageHandler(selectedImage)}
+                    onClick={() => deleteImageHandler(selectedImage, productId)}
                   >
                     Delete Image
                   </Button>

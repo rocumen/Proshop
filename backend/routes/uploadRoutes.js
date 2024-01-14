@@ -120,7 +120,10 @@ router.post("/", async (req, res) => {
               if (error) {
                 reject(error);
               } else {
-                resolve(result.secure_url);
+                resolve({
+                  url: result.secure_url,
+                  id: result.public_id,
+                });
               }
             })
             .end(resizedImageBuffer);
