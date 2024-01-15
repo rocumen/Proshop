@@ -113,7 +113,11 @@ function ProductScreen() {
                   <Carousel.Item key={index}>
                     <Image
                       rounded
-                      src={image.url}
+                      src={
+                        product.image && product.image.length > 0
+                          ? product.image[0].url
+                          : "https://cdn.vox-cdn.com/thumbor/fTSCwFG5qxjEXaDJm4bU1ATqSQE=/0x0:628x287/1200x0/filters:focal(0x0:628x287):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/13375469/file_not_found.jpg"
+                      }
                       alt={product.name}
                       fluid
                       style={{ width: 451, height: 359 }}
@@ -228,7 +232,7 @@ function ProductScreen() {
                     <Button
                       className="btn-block"
                       type="button"
-                      disabled={userInfo.isAdmin || product.countInStock === 0}
+                      // disabled={userInfo.isAdmin || product.countInStock === 0}
                       onClick={addToCartHandler}
                     >
                       {userInfo.isAdmin
