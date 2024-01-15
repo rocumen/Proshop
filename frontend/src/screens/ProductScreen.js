@@ -11,6 +11,7 @@ import {
   Card,
   Button,
   Carousel,
+  InputGroup,
 } from "react-bootstrap";
 import Rating from "../components/Rating";
 import {
@@ -74,7 +75,7 @@ function ProductScreen() {
 
   return (
     <>
-      <Link className="btn btn-light my-3" to="/">
+      <Link className="btn btn-light my-3" to="/allproducts">
         Go Back
       </Link>
 
@@ -197,9 +198,11 @@ function ProductScreen() {
                       <Col>Status:</Col>
                       <Col>
                         <strong>
-                          {product.countInStock > 0
-                            ? "In Stock"
-                            : "Out of stock"}
+                          {product.countInStock > 0 ? (
+                            <p>{`Only ${product.countInStock} left`}</p>
+                          ) : (
+                            <p>Out of stock</p>
+                          )}
                         </strong>
                       </Col>
                     </Row>
@@ -210,31 +213,53 @@ function ProductScreen() {
                       <Row>
                         <Col>Qty</Col>
                         <Col>
-                          <Form.Control
-                            as="select"
-                            value={qty}
-                            onChange={(e) => setQty(Number(e.target.value))}
-                          >
-                            {[...Array(product.countInStock).keys()].map(
-                              (x) => (
-                                <option key={x + 1} value={x + 1}>
-                                  {x + 1}
-                                </option>
-                              )
-                            )}
-                          </Form.Control>
+                          <InputGroup>
+                            <Form.Control
+                              type="text"
+                              pattern="[0-9]*"
+                              value={qty}
+                              onChange={(e) => {
+                                const enteredQty = Number(e.target.value);
+                                setQty(
+                                  Math.min(enteredQty, product.countInStock)
+                                );
+                              }}
+                              min={1}
+                              max={product.countInStock}
+                            />
+                            <Form.Control
+                              as="select"
+                              value={qty}
+                              onChange={(e) => setQty(Number(e.target.value))}
+                            >
+                              {[...Array(product.countInStock).keys()].map(
+                                (x) => (
+                                  <option key={x + 1} value={x + 1}>
+                                    {x + 1}
+                                  </option>
+                                )
+                              )}
+                            </Form.Control>
+                          </InputGroup>
                         </Col>
                       </Row>
                     </ListGroup.Item>
                   )}
 
-                  <ListGroup.Item>
+                  <ListGroup.Item className="mx-auto">
                     {userInfo && userInfo.isAdmin ? (
                       <Button
                         className="btn-block"
                         type="button"
                         disabled
                         onClick={addToCartHandler}
+                        style={{
+                          width: "150px",
+                          height: "30px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
                       >
                         Add to cart
                       </Button>
@@ -244,6 +269,13 @@ function ProductScreen() {
                         type="button"
                         disabled={product.countInStock === 0}
                         onClick={addToCartHandler}
+                        style={{
+                          width: "150px",
+                          height: "30px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
                       >
                         Add to cart
                       </Button>

@@ -55,6 +55,12 @@ const Header = () => {
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ms-auto">
                 <SearchBox />
+                <LinkContainer to="/">
+                  <Nav.Link>Home</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to="/allproducts">
+                  <Nav.Link>Products</Nav.Link>
+                </LinkContainer>
                 <LinkContainer to="/cart">
                   <Nav.Link>
                     <FaShoppingCart />
@@ -66,6 +72,7 @@ const Header = () => {
                     )}
                   </Nav.Link>
                 </LinkContainer>
+
                 {userInfo && userInfo.isAdmin && (
                   <NavDropdown title="Admin" id="adminmenu">
                     <LinkContainer to={"/admin/productlist"}>

@@ -49,7 +49,7 @@ const router = createBrowserRouter(
         element={<HomeScreen />}
       />
       <Route path="/product/:id" element={<ProductScreen />} />
-      <Route path="/products" element={<AllProductsScreen />} />
+      <Route path="/allproducts" element={<AllProductsScreen />} />
       <Route path="/cart" element={<CartScreen />} />
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
