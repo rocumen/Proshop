@@ -158,11 +158,18 @@ function ProductScreen() {
                   />
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <select>
-                    {product.variant.map((x) => (
-                      <option value={x}>{x}</option>
-                    ))}
-                  </select>
+                  {product.variant.length > 0 ? (
+                    <>
+                      <h6>Variant</h6>
+                      <select>
+                        {product.variant.map((x) => (
+                          <option value={x}>{x}</option>
+                        ))}
+                      </select>
+                    </>
+                  ) : (
+                    ""
+                  )}
                 </ListGroup.Item>
 
                 <ListGroup.Item>
