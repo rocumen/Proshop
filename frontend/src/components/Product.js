@@ -5,11 +5,12 @@ import Rating from "./Rating";
 function Product({ product }) {
   return (
     <>
-      <Card className="my-3 p-3 rounded">
+      <Card className="my-3 p-3 text-center">
         <Link to={`/product/${product._id}`}>
           <Card.Img
-            src={product.image[0].url}
-            variant="top"
+            src={product.image[0].url || ""}
+            alt={product.name}
+            // variant="top"
             style={{ width: 221, height: 176 }}
           />
         </Link>

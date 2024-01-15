@@ -10,6 +10,7 @@ import {
   ListGroup,
   Card,
   Button,
+  Carousel,
 } from "react-bootstrap";
 import Rating from "../components/Rating";
 import {
@@ -32,6 +33,7 @@ function ProductScreen() {
   const [qty, setQty] = useState(1);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const {
     data: product,
@@ -66,6 +68,10 @@ function ProductScreen() {
     }
   };
 
+  const handleSmallImageClick = (index) => {
+    setActiveIndex(index);
+  };
+
   return (
     <>
       <Link className="btn btn-light my-3" to="/">
@@ -82,9 +88,9 @@ function ProductScreen() {
         <>
           <Meta title={product.name} />
           <Row>
-            <Col md={5}>
+            <Col md={5} className="text-center">
               {/* Display the main image */}
-              <Image
+              {/* <Image
                 rounded
                 src={
                   product.image && product.image.length > 0
@@ -94,8 +100,29 @@ function ProductScreen() {
                 alt={product.name}
                 fluid
                 style={{ width: 451, height: 359 }}
-              />
+              /> */}
+              {/* Carousel for main image */}
+              <Carousel
+                activeIndex={activeIndex}
+                onSelect={(index) => setActiveIndex(index)}
+                interval={null} // Set interval to null to disable automatic transitions
+                indicators={false} // Set indicators to false to hide the indicators
+                controls={true} // Set controls to false to hide the next/prev controls
+              >
+                {product.image.map((image, index) => (
+                  <Carousel.Item key={index}>
+                    <Image
+                      rounded
+                      src={image.url}
+                      alt={product.name}
+                      fluid
+                      style={{ width: 451, height: 359 }}
+                    />
+                  </Carousel.Item>
+                ))}
+              </Carousel>
 
+              {/* Small images */}
               <Col md={12}>
                 <Row>
                   {product.image.slice(0, 3).map((image, index) => (
@@ -109,7 +136,9 @@ function ProductScreen() {
                           width: 150,
                           height: 120,
                           marginTop: "24px",
+                          cursor: "pointer", // Add cursor style to indicate it's clickable
                         }}
+                        onClick={() => handleSmallImageClick(index)}
                       />
                     </Col>
                   ))}

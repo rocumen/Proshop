@@ -39,10 +39,8 @@ const ProductEditScreen = () => {
   const [uploadProductImages, { isLoading: loadingUpload }] =
     useUploadProductImagesMutation();
 
-  const [
-    deleteProductImage,
-    { isLoading: deleteLoading, refetch: refetchImage },
-  ] = useDeleteProductImageMutation();
+  const [deleteProductImage, { isLoading: deleteLoading }] =
+    useDeleteProductImageMutation();
 
   const navigate = useNavigate();
 
@@ -116,27 +114,27 @@ const ProductEditScreen = () => {
     }
   };
 
-  const deleteImageHandler = async (imageIndex, productId) => {
-    try {
-      const props = {
-        imageIndex: imageIndex.join("/"),
-        productId: productId,
-      };
-      deleteProductImage(props);
-
-      toast.success("Deleted image");
-      refetch();
-    } catch (error) {
-      toast.error(error?.data?.message || error.error);
-    }
-  };
-
   const handleShowModal = () => {
     setShowModal(true);
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
+  };
+
+  const deleteImageHandler = async (imageIndex, productId) => {
+    try {
+      const props = {
+        imageIndex: imageIndex.join("/"),
+        productId: productId,
+      };
+
+      await deleteProductImage(props);
+      refetch();
+      toast.success("Deleted image");
+    } catch (error) {
+      toast.error(error?.data?.message || error.error);
+    }
   };
 
   const handleImageClick = (index) => {
@@ -151,7 +149,6 @@ const ProductEditScreen = () => {
         return [...prevSelected, index];
       }
     });
-    console.log(selectedImage);
   };
 
   return (
@@ -223,55 +220,56 @@ const ProductEditScreen = () => {
                 Delete Image
               </Button>
             </Form.Group> */}
-            <>
-              {/* Button to show modal */}
-              <Button onClick={handleShowModal} className="mb-2">
-                Show Images
-              </Button>
 
-              {/* Modal to display images */}
-              <Modal show={showModal} onHide={handleCloseModal} centered>
-                <Modal.Header closeButton>
-                  <Modal.Title>Images</Modal.Title>
-                </Modal.Header>
-                <h6 className="ms-3 mt-2">Select Images to Delete</h6>
-                <Modal.Body>
-                  {product.image.map((image, index) => (
-                    <div
-                      key={index}
-                      style={{ display: "inline-block", margin: "10px" }}
-                    >
-                      <Image
-                        rounded
-                        src={image.url}
-                        alt={product.name}
-                        fluid
-                        style={{
-                          width: 150,
-                          height: 120,
-                          cursor: "pointer",
-                          border: selectedImage.includes(index)
-                            ? "2px solid red"
-                            : "2px solid transparent",
-                        }}
-                        onClick={() => handleImageClick(index)}
-                      />
-                    </div>
-                  ))}
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button variant="secondary" onClick={handleCloseModal}>
-                    Close
-                  </Button>
-                  <Button
-                    variant="danger"
-                    onClick={() => deleteImageHandler(selectedImage, productId)}
+            {/* Button to show modal */}
+            <Button onClick={handleShowModal} className="mb-2">
+              Show Images
+            </Button>
+
+            {/* Modal to display images */}
+            {deleteLoading && <Loader />}
+            <Modal show={showModal} onHide={handleCloseModal} centered>
+              <Modal.Header closeButton>
+                <Modal.Title>Images</Modal.Title>
+              </Modal.Header>
+              <h6 className="ms-3 mt-2">Select Images to Delete</h6>
+              <Modal.Body>
+                {product.image.map((image, index) => (
+                  <div
+                    key={index}
+                    style={{ display: "inline-block", margin: "10px" }}
                   >
-                    Delete Image
-                  </Button>
-                </Modal.Footer>
-              </Modal>
-            </>
+                    <Image
+                      rounded
+                      src={image.url}
+                      alt={product.name}
+                      fluid
+                      style={{
+                        width: 150,
+                        height: 120,
+                        cursor: "pointer",
+                        border: selectedImage.includes(index)
+                          ? "2px solid red"
+                          : "2px solid transparent",
+                      }}
+                      onClick={() => handleImageClick(index)}
+                    />
+                  </div>
+                ))}
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleCloseModal}>
+                  Close
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={() => deleteImageHandler(selectedImage, productId)}
+                >
+                  Delete Image
+                </Button>
+                {}
+              </Modal.Footer>
+            </Modal>
 
             {/* File input for selecting multiple images */}
             <Form.Group>
