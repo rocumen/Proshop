@@ -114,9 +114,9 @@ function ProductScreen() {
                     <Image
                       rounded
                       src={
-                        product.image && product.image.length > 0
-                          ? product.image[0].url
-                          : "https://cdn.vox-cdn.com/thumbor/fTSCwFG5qxjEXaDJm4bU1ATqSQE=/0x0:628x287/1200x0/filters:focal(0x0:628x287):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/13375469/file_not_found.jpg"
+                        product.image && product.image.length < 1
+                          ? "https://cdn.vox-cdn.com/thumbor/fTSCwFG5qxjEXaDJm4bU1ATqSQE=/0x0:628x287/1200x0/filters:focal(0x0:628x287):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/13375469/file_not_found.jpg"
+                          : product.image[0].url
                       }
                       alt={product.name}
                       fluid
@@ -229,16 +229,25 @@ function ProductScreen() {
                   )}
 
                   <ListGroup.Item>
-                    <Button
-                      className="btn-block"
-                      type="button"
-                      disabled={product.countInStock === 0}
-                      onClick={addToCartHandler}
-                    >
-                      {userInfo.isAdmin
-                        ? "Admin Cannot Add to Cart"
-                        : "Add To Cart"}
-                    </Button>
+                    {userInfo && userInfo.isAdmin ? (
+                      <Button
+                        className="btn-block"
+                        type="button"
+                        disabled
+                        onClick={addToCartHandler}
+                      >
+                        Add to cart
+                      </Button>
+                    ) : (
+                      <Button
+                        className="btn-block"
+                        type="button"
+                        disabled={product.countInStock === 0}
+                        onClick={addToCartHandler}
+                      >
+                        Add to cart
+                      </Button>
+                    )}
                   </ListGroup.Item>
                 </ListGroup>
               </Card>
