@@ -232,7 +232,7 @@ function ProductScreen() {
                     <Button
                       className="btn-block"
                       type="button"
-                      // disabled={userInfo.isAdmin || product.countInStock === 0}
+                      disabled={product.countInStock === 0}
                       onClick={addToCartHandler}
                     >
                       {userInfo.isAdmin
