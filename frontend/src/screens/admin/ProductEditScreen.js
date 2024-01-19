@@ -140,6 +140,7 @@ const ProductEditScreen = () => {
   const handleImageClick = (index) => {
     // Check if the image is already selected
     const isSelected = selectedImage.includes(index);
+    console.log(isSelected);
 
     // Update the selected images state
     setSelectedImage((prevSelected) => {
@@ -185,42 +186,6 @@ const ProductEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
-            {/* <Form.Group controlId="images" className="my-2">
-              <Form.Label>Images</Form.Label> <br />
-              {Array.isArray(image) ? (
-                // If 'image' is an array, map over it
-                image.map((imageUrl, index) => (
-                  <img
-                    key={index}
-                    src={imageUrl}
-                    alt={`Image ${index + 1}`}
-                    style={{
-                      marginRight: "10px",
-                      marginBottom: "10px",
-                      height: "50px",
-                      width: "50px",
-                    }}
-                    className="rounded"
-                  />
-                ))
-              ) : (
-                // If 'image' is a single string URL
-                <img
-                  src={image}
-                  alt="Image"
-                  style={{
-                    height: "50px",
-                    width: "50px",
-                  }}
-                  className="rounded"
-                />
-              )}
-              <br />
-              <Button onClick={deleteImageHandler} className="mb-2">
-                Delete Image
-              </Button>
-            </Form.Group> */}
-
             {/* Button to show modal */}
             <Button onClick={handleShowModal} className="mb-2">
               Show Images
@@ -261,13 +226,23 @@ const ProductEditScreen = () => {
                 <Button variant="secondary" onClick={handleCloseModal}>
                   Close
                 </Button>
-                <Button
-                  variant="danger"
-                  onClick={() => deleteImageHandler(selectedImage, productId)}
-                >
-                  Delete Image
-                </Button>
-                {}
+                {product.image.length <= 1 ||
+                selectedImage.length === product.image.length ? (
+                  <Button
+                    variant="danger"
+                    onClick={() => deleteImageHandler(selectedImage, productId)}
+                    disabled
+                  >
+                    Delete Image
+                  </Button>
+                ) : (
+                  <Button
+                    variant="danger"
+                    onClick={() => deleteImageHandler(selectedImage, productId)}
+                  >
+                    Delete Image
+                  </Button>
+                )}
               </Modal.Footer>
             </Modal>
 

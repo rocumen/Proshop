@@ -24,6 +24,7 @@ import { addToCart } from "../slices/cartSlice";
 
 import { toast } from "react-toastify";
 import Meta from "../components/Meta";
+import GoBackButton from "../components/GoBack";
 
 function ProductScreen() {
   const { id: productId } = useParams();
@@ -49,7 +50,7 @@ function ProductScreen() {
 
   const addToCartHandler = () => {
     dispatch(addToCart({ ...product, qty }));
-    navigate("/cart");
+    toast.success("Product added to cart");
   };
 
   const submitHandler = async (e) => {
@@ -75,9 +76,7 @@ function ProductScreen() {
 
   return (
     <>
-      <Link className="btn btn-light my-3" to="/allproducts">
-        Go Back
-      </Link>
+      <GoBackButton />
 
       {isLoading ? (
         <Loader />
@@ -269,13 +268,6 @@ function ProductScreen() {
                         type="button"
                         disabled={product.countInStock === 0}
                         onClick={addToCartHandler}
-                        style={{
-                          width: "150px",
-                          height: "30px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
                       >
                         Add to cart
                       </Button>

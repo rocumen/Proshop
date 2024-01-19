@@ -32,6 +32,8 @@ const CartScreen = () => {
     navigate("/login?redirect=/shipping");
   };
 
+  console.log(cartItems);
+
   return (
     <Row>
       <Col md={8}>
@@ -46,7 +48,12 @@ const CartScreen = () => {
               <ListGroup.Item key={item._id}>
                 <Row>
                   <Col md={2}>
-                    <Image src={item.image} alt={item.name} fluid rounded />
+                    <Image
+                      src={item.image[0].url}
+                      alt={item.name}
+                      fluid
+                      rounded
+                    />
                   </Col>
                   <Col md={3}>
                     <Link to={`/product/${item._id}`}>{item.name}</Link>

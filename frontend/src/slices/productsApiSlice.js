@@ -13,7 +13,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
     }),
     getProductDetails: builder.query({
       query: (productId) => ({
-        url: `${PRODUCTS_URL}/${productId}`,
+        url: `${PRODUCTS_URL}/getone/${productId}`,
       }),
       keepUnusedDataFor: 5,
     }),
@@ -26,7 +26,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
     }),
     updateProduct: builder.mutation({
       query: (data) => ({
-        url: `${PRODUCTS_URL}/${data.productId}`,
+        url: `${PRODUCTS_URL}/updateProduct/${data.productId}`,
         method: "PUT",
         body: data,
       }),
@@ -34,27 +34,27 @@ export const productsApiSlice = apiSlice.injectEndpoints({
     }),
     uploadProductImages: builder.mutation({
       query: (data) => ({
-        url: `${UPLOAD_URL}`,
+        url: `${UPLOAD_URL}/upload`,
         method: "POST",
         body: data,
       }),
     }),
     deleteProductImage: builder.mutation({
       query: ({ imageIndex, productId }) => ({
-        url: `${PRODUCTS_URL}/update?productId=${productId}`,
+        url: `${PRODUCTS_URL}/updateImage?productId=${productId}`,
         method: "PUT",
         body: { imageIndex: imageIndex },
       }),
     }),
     deleteProduct: builder.mutation({
       query: (productId) => ({
-        url: `${PRODUCTS_URL}/${productId}`,
+        url: `${PRODUCTS_URL}/deleteProduct/${productId}`,
         method: "DELETE",
       }),
     }),
     createReview: builder.mutation({
       query: (data) => ({
-        url: `${PRODUCTS_URL}/${data.productId}/reviews`,
+        url: `${PRODUCTS_URL}/reviews/${data.productId}`,
         method: "POST",
         body: data,
       }),
@@ -65,6 +65,13 @@ export const productsApiSlice = apiSlice.injectEndpoints({
         url: `${PRODUCTS_URL}/top`,
       }),
       keepUnusedDataFor: 5,
+    }),
+    getProductsByCategory: builder.query({
+      query: (category) => ({
+        url: `${PRODUCTS_URL}/category`,
+        method: "GET",
+        body: { category: category },
+      }),
     }),
   }),
 });
@@ -79,4 +86,5 @@ export const {
   useCreateReviewMutation,
   useGetTopProductsQuery,
   useDeleteProductImageMutation,
+  useGetProductsByCategoryQuery,
 } = productsApiSlice;

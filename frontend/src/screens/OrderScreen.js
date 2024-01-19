@@ -4,6 +4,7 @@ import { Row, Col, ListGroup, Image, Button, Card } from "react-bootstrap";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
+import GoBackButton from "../components/GoBack";
 import {
   useGetOrderDetailsQuery,
   usePayOrderMutation,
@@ -110,6 +111,7 @@ const OrderScreen = () => {
     <Message variant="danger">{error?.data?.message || error.error}</Message>
   ) : (
     <>
+      <GoBackButton />
       <h1>Order {order._id}</h1>
       <Row>
         <Col md={8}>
@@ -159,8 +161,13 @@ const OrderScreen = () => {
                 <ListGroup.Item key={index}>
                   <Row>
                     <Col md={1}>
-                      <Link to={`/product/${item.product}`}>
-                        <Image src={item.image} alt={item.name} fluid rounded />
+                      <Link to={`/products/${item.product}`}>
+                        <Image
+                          src={item.image[0].url}
+                          alt={item.name}
+                          fluid
+                          rounded
+                        />
                       </Link>
                     </Col>
                     <Col>

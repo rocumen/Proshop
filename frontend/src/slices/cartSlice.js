@@ -9,7 +9,6 @@ const initialState = localStorage.getItem("cart")
 const cartSlice = createSlice({
   name: "cart",
   initialState,
-  //actions/command
   reducers: {
     addToCart: (state, action) => {
       const item = action.payload;

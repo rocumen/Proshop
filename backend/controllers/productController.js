@@ -1,5 +1,6 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import Product from "../models/productModel.js";
+import cloudinary from "cloudinary";
 
 // @desc Fetch all products
 // @route GET /api/products
@@ -71,7 +72,6 @@ const updateProduct = asyncHandler(async (req, res) => {
     countInStock,
   } = req.body;
   const product = await Product.findById(req.params.id);
-  console.log(image);
 
   if (product) {
     // Update other fields
@@ -79,7 +79,6 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.price = price;
     product.description = description;
     product.brand = brand;
-    product.category = category;
     product.countInStock = countInStock;
 
     // Update the image array
@@ -91,12 +90,20 @@ const updateProduct = asyncHandler(async (req, res) => {
       product.image = image;
     }
 
+    // checks if the category is already existing in the database
+    if (product.category === category) {
+      throw new Error("Category already exist");
+    } else {
+      product.category = category;
+    }
+
     // adds variant in the array
     if (variant && Array.isArray(variant)) {
       // Filter out duplicates before concatenating
       product.variant = [...new Set([...product.variant, ...variant])];
     } else {
-      product.variant = variant;
+      // product.variant = variant;
+      product.variant = [];
     }
 
     const updatedProduct = await product.save();
@@ -173,29 +180,100 @@ const getTopProducts = asyncHandler(async (req, res) => {
   res.status(200).json(products);
 });
 
+// @desc Delete Single/Multiple Product Image
+// @route PUT /api/products/update
+// @access Private/Admin
+// const deleteProductImage = asyncHandler(async (req, res) => {
+//   try {
+//     const product = await Product.findById(req.query.productId);
+
+//     const { imageIndex } = req.body;
+//     console.log(imageIndex);
+
+//     const imageIndexToDelete = imageIndex.split("/").map(Number);
+
+//     imageIndexToDelete.forEach((index) => {
+//       const image = product.image.indexOf(index);
+
+//       // // Remove the imageUrlToDelete from the product's images array
+//       product.image.splice(image, 1);
+//     });
+
+//     // Save the updated product
+//     await product.save();
+
+//     res.status(200).json({ message: "Image deleted successfully" });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// });
+
 const deleteProductImage = asyncHandler(async (req, res) => {
   try {
     const product = await Product.findById(req.query.productId);
 
     const { imageIndex } = req.body;
+    console.log(imageIndex);
 
     const imageIndexToDelete = imageIndex.split("/").map(Number);
 
-    imageIndexToDelete.forEach((index) => {
-      const image = product.image.indexOf(index);
+    // Loop through the indices to delete from Cloudinary
+    for (const index of imageIndexToDelete) {
+      const publicIdToDelete = product.image[index]; // Assuming product.image stores Cloudinary public_ids
 
-      // // Remove the imageUrlToDelete from the product's images array
-      product.image.splice(image, 1);
-    });
+      // Delete the image from Cloudinary
+      const cloudinaryResult = await cloudinary.uploader.destroy(
+        publicIdToDelete
+      );
+
+      // Check Cloudinary result and handle accordingly
+      if (cloudinaryResult.result === "ok") {
+        console.log(
+          `Image with public_id ${publicIdToDelete} deleted from Cloudinary.`
+        );
+      } else {
+        console.error(
+          `Failed to delete image with public_id ${publicIdToDelete} from Cloudinary. Error: ${cloudinaryResult.error}`
+        );
+      }
+
+      // Remove the imageUrlToDelete from the product's images array
+      product.image.splice(index, 1);
+    }
 
     // Save the updated product
     await product.save();
 
-    res.status(200).json({ message: "Image deleted successfully" });
+    res.status(200).json({ message: "Image(s) deleted successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
+});
+
+// const deleteProductImagesFromCloudinary = async (publicIds) => {
+//   try {
+//     return await cloudinary.api.delete_resources(publicIds, {
+//       type: "upload",
+//       resource_type: "image",
+//     });
+//   } catch (error) {
+//     throw new Error("Delete img from Cloudinary failed");
+//   }
+// };
+
+// @desc Get Specific Product by Category
+// @route GET /api/products/update
+// @access Public
+
+const filterByCategory = asyncHandler(async (req, res) => {
+  const products = await Product.find({
+    category: { $regex: new RegExp(req.body.category, "i") },
+  });
+
+  //.sort({ name: -1 });
+  res.json(products);
 });
 
 export {
@@ -207,4 +285,5 @@ export {
   createProductReview,
   getTopProducts,
   deleteProductImage,
+  filterByCategory,
 };

@@ -9,22 +9,22 @@ const ProductCarousel = () => {
   return isLoading ? null : error ? (
     <Message variant="danger">{error?.data?.message || error.error}</Message>
   ) : (
-    <Carousel pause="hover" className="bg-primary mb-4">
+    <Carousel pause="hover" className="car bg-primary mb-4">
       {products.map((product) => (
-        <Carousel.Item key={product._id}>
-          <Link to={`/product/${product._id}`}>
+        <Carousel.Item key={product._id} className="car">
+          <Link className="link" to={`/product/${product._id}`}>
             <Image
               src={product.image[0].url}
               alt={product.name}
               fluid
               style={{ width: "640px", height: "510px" }}
             />
-            <Carousel.Caption className="carousel-caption">
-              <h2 className="text-white text-right">
-                {product.name} (${product.price})
-              </h2>
-            </Carousel.Caption>
           </Link>
+          <div className="carousel-caption">
+            <h2 className="text-white">
+              {product.name} (${product.price})
+            </h2>
+          </div>
         </Carousel.Item>
       ))}
     </Carousel>

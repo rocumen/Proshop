@@ -11,6 +11,7 @@ import {
   createProductReview,
   getTopProducts,
   deleteProductImage,
+  filterByCategory,
 } from "../controllers/productController.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
 import checkObjectId from "../middleware/checkObjectId.js";
@@ -18,14 +19,17 @@ import checkObjectId from "../middleware/checkObjectId.js";
 router.route("/").get(getProducts).post(protect, admin, createProduct);
 router.get("/top", getTopProducts);
 
-router.route("/update").put(deleteProductImage);
-
-router
-  .route("/:id")
-  .get(checkObjectId, getProductById)
-  .put(protect, admin, checkObjectId, updateProduct)
-  .delete(protect, admin, checkObjectId, deleteProduct);
-
-router.route("/:id/reviews").post(protect, checkObjectId, createProductReview);
+router.put("/updateImage", deleteProductImage);
+router.get("/category", filterByCategory);
+router.get("/getone/:id", checkObjectId, getProductById);
+router.put("/updateProduct/:id", protect, admin, checkObjectId, updateProduct);
+router.delete(
+  "/deleteProduct/:id",
+  protect,
+  admin,
+  checkObjectId,
+  deleteProduct
+);
+router.post("/reviews/:id", protect, checkObjectId, createProductReview);
 
 export default router;

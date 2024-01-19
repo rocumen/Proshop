@@ -63,7 +63,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-export default router;
+
 */
 
 import path from "path";
@@ -71,9 +71,13 @@ import express from "express";
 import multer from "multer";
 import cloudinary from "cloudinary";
 import sharp from "sharp";
-import Product from "../models/productModel.js";
-
+import dotenv from "dotenv";
+dotenv.config();
 const router = express.Router();
+
+// console.log("CLOUDINARY_CLOUD_NAME:", process.env.CLOUDINARY_CLOUD_NAME);
+// console.log("CLOUDINARY_API_KEY:", process.env.CLOUDINARY_API_KEY);
+// console.log("CLOUDINARY_API_SECRET:", process.env.CLOUDINARY_API_SECRET);
 
 cloudinary.config({
   cloud_name: "dg60equpb",
@@ -100,7 +104,7 @@ function fileFilter(req, file, cb) {
 const upload = multer({ storage, fileFilter });
 const uploadMultipleImages = upload.array("images", 10); // "images" is the field name for multiple images, and 10 is the maximum number of files
 
-router.post("/", async (req, res) => {
+router.post("/upload", async (req, res) => {
   try {
     uploadMultipleImages(req, res, async function (err) {
       if (err) {
@@ -139,7 +143,8 @@ router.post("/", async (req, res) => {
       });
     });
   } catch (error) {
-    res.status(500).send({ message: "Server error" });
+    console.error("Error:", error);
+    res.status(500).send({ message: "Internal Server Error" });
   }
 });
 

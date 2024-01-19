@@ -19,10 +19,16 @@ const orderSchema = mongoose.Schema(
           required: true,
         },
 
-        image: {
-          type: String,
-          required: true,
-        },
+        image: [
+          {
+            url: {
+              type: String,
+            },
+            id: {
+              type: String,
+            },
+          },
+        ],
 
         price: {
           type: Number,
@@ -39,7 +45,6 @@ const orderSchema = mongoose.Schema(
     shippingAddress: {
       address: {
         type: String,
-        required: true,
       },
 
       city: {
