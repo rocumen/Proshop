@@ -80,14 +80,18 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.description = description;
     product.brand = brand;
     product.countInStock = countInStock;
+    // product.image = [];
+    // product.variant = [];
 
     // Update the image array
     if (image && Array.isArray(image)) {
       // Concatenate new images to the existing array
       product.image = product.image.concat(image);
+      // product.image = [...product.image, ...image];
     } else {
       // Handle other cases if needed
-      product.image = image;
+      // product.image = image;
+      product.image.push(image);
     }
 
     // checks if the category is already existing in the database

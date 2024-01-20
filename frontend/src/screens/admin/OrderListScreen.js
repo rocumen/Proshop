@@ -16,7 +16,7 @@ const OrderListScreen = () => {
       ) : error ? (
         <Message variant={"danger"}>{error}</Message>
       ) : (
-        <Table striped hover responsive className="table-sm">
+        <Table striped hover bordered responsive className="table-sm">
           <thead>
             <tr>
               <th>ID</th>
@@ -31,7 +31,7 @@ const OrderListScreen = () => {
           <tbody>
             {orders.map((order) => (
               <tr key={order._id}>
-                <td>{order._id}</td>
+                <td>{order._id.substring(0, 6)}</td>
                 <td>{order.user && order.user.name}</td>
                 <td>{order.createdAt.substring(0, 10)}</td>
                 <td>{order.totalPrice}</td>

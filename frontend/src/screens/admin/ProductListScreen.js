@@ -70,7 +70,7 @@ const ProductListScreen = () => {
         <Message variant={"danger"}>{error.data.message}</Message>
       ) : (
         <>
-          <Table striped hover responsive className="table-sm">
+          <Table striped hover bordered responsive className="table-sm">
             <thead>
               <tr>
                 <th>ID</th>
@@ -84,7 +84,7 @@ const ProductListScreen = () => {
             <tbody>
               {data.products.map((product) => (
                 <tr key={product._id}>
-                  <td>{product._id}</td>
+                  <td>{product._id.substring(0, 6)}</td>
                   <td>{product.name}</td>
                   <td>{product.price}</td>
                   <td>{product.category}</td>

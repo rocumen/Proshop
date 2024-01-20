@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Row, Col, Form, Button } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import Product from "../components/Product";
 import { useGetProductsQuery } from "../slices/productsApiSlice";

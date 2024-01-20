@@ -1,3 +1,7 @@
+/* * {
+  min-width: 0;
+} */
+
 main {
   min-height: 80vh;
 }
@@ -43,15 +47,24 @@ table th {
   margin-top: 10px;
 }
 
-.car {
-  position: relative;
+.carousel-caption {
+  background: #00000080;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
 }
 
 .carousel-caption {
-  position: absolute;
-  width: 100%;
-  color: #fff;
-  text-align: center;
-  margin-left: -195px;
-  background: rgba(0, 0, 0, 0.5);
+  left: 0 !important;
+  right: 0 !important;
+}
+
+.Image {
+  transition: opacity 0.3s ease;
+}
+
+.Image:hover {
+  opacity: 0.85;
+  transform: scale(1.01);
 }

@@ -112,12 +112,10 @@ router.post("/upload", async (req, res) => {
       }
 
       const uploadPromises = req.files.map(async (file) => {
-        // Use sharp to resize each image
-        const resizedImageBuffer = await sharp(file.buffer)
-          .resize({}) // Set your desired width and height
-          .toBuffer();
+        // Remove the resizing part from Sharp
+        const resizedImageBuffer = file.buffer;
 
-        // Upload the resized image to Cloudinary
+        // Upload the image to Cloudinary without resizing
         return new Promise((resolve, reject) => {
           cloudinary.v2.uploader
             .upload_stream({ resource_type: "image" }, (error, result) => {

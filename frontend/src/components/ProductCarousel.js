@@ -20,8 +20,8 @@ const ProductCarousel = () => {
               style={{ width: "640px", height: "510px" }}
             />
           </Link>
-          <div className="carousel-caption">
-            <h2 className="text-white">
+          <div className="text-start rounded ">
+            <h2 className="text-white text-center carousel-caption">
               {product.name} (${product.price})
             </h2>
           </div>

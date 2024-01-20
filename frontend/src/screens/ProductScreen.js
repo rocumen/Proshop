@@ -36,6 +36,7 @@ function ProductScreen() {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const {
     data: product,
@@ -71,6 +72,7 @@ function ProductScreen() {
   };
 
   const handleSmallImageClick = (index) => {
+    setSelectedImage(index);
     setActiveIndex(index);
   };
 
@@ -112,15 +114,16 @@ function ProductScreen() {
                 {product.image.map((image, index) => (
                   <Carousel.Item key={index}>
                     <Image
+                      className="Image"
                       rounded
                       src={
                         product.image && product.image.length < 1
                           ? "https://cdn.vox-cdn.com/thumbor/fTSCwFG5qxjEXaDJm4bU1ATqSQE=/0x0:628x287/1200x0/filters:focal(0x0:628x287):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/13375469/file_not_found.jpg"
-                          : product.image[0].url
+                          : image.url
                       }
                       alt={product.name}
                       fluid
-                      style={{ width: 451, height: 359 }}
+                      style={{ maxHeight: "450px", maxWidth: "100%" }}
                     />
                   </Carousel.Item>
                 ))}
@@ -128,19 +131,22 @@ function ProductScreen() {
 
               {/* Small images */}
               <Col md={12}>
-                <Row>
-                  {product.image.slice(0, 3).map((image, index) => (
-                    <Col key={index} md={4}>
+                <Row className="justify-content-center">
+                  {product.image.slice(0, 4).map((image, index) => (
+                    <Col key={index} md={3}>
                       <Image
+                        className="Image my-3"
+                        border
                         rounded
                         src={image.url}
                         alt={`${product.name} - Image ${index + 2}`}
                         fluid
                         style={{
-                          width: 150,
-                          height: 120,
-                          marginTop: "24px",
                           cursor: "pointer", // Add cursor style to indicate it's clickable
+                          border: `1px solid ${
+                            selectedImage === index ? "blue" : "transparent"
+                          }`,
+                          maxHeight: "100px",
                         }}
                         onClick={() => handleSmallImageClick(index)}
                       />
